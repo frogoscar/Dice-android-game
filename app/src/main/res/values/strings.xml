@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Casino</string>
+    <string name="app_version">0.7</string>
+    <drawable name="bkcolor">#ffffff</drawable>
 </resources>

@@ -1,7 +1,7 @@
 package com.paris.casino;
 
 /**
- * Created by yddn on 000026/4/26.
+ * Created by exe on 000026/4/26.
  */
 public class Player {
 

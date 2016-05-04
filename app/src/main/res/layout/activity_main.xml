@@ -7,10 +7,27 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.paris.casino.MainActivity">
+    tools:context="com.paris.casino.MainActivity"
+    android:background="@drawable/mainbg" >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!" />
+    <ImageView
+        android:id="@+id/ImageSingle"
+        android:layout_width="148dip"
+        android:layout_height="33dip"
+        android:background="@drawable/single"></ImageView>
+    <ImageView
+        android:id="@+id/ImageMulti"
+        android:layout_width="148dip"
+        android:layout_height="33dip"
+        android:background="@drawable/multi"></ImageView>
+    <ImageView
+        android:id="@+id/ImageHelp"
+        android:layout_width="148dip"
+        android:layout_height="33dip"
+        android:background="@drawable/help"></ImageView>
+    <ImageView
+        android:id="@+id/ImageExit"
+        android:layout_width="148dip"
+        android:layout_height="33dip"
+        android:background="@drawable/exit"></ImageView>
 </RelativeLayout>
