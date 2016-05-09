@@ -16,11 +16,6 @@
         android:layout_height="33dip"
         android:background="@drawable/single"></ImageView>
     <ImageView
-        android:id="@+id/ImageMulti"
-        android:layout_width="148dip"
-        android:layout_height="33dip"
-        android:background="@drawable/multi"></ImageView>
-    <ImageView
         android:id="@+id/ImageHelp"
         android:layout_width="148dip"
         android:layout_height="33dip"

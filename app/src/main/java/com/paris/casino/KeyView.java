@@ -88,34 +88,19 @@ public class KeyView extends View {
                     bm = BitmapFactory.decodeResource( context.getResources(), R.drawable.k09_press );
                 break;
             case 10:
-                if( !pressed )
-                    bm = BitmapFactory.decodeResource( context.getResources(), R.drawable.ge );
-                else
-                    bm = BitmapFactory.decodeResource( context.getResources(), R.drawable.ge_press );
+                bm = BitmapFactory.decodeResource( context.getResources(), R.drawable.ge );
                 break;
             case 11:
-                if( !pressed )
-                    bm = BitmapFactory.decodeResource( context.getResources(), R.drawable.chun );
-                else
-                    bm = BitmapFactory.decodeResource( context.getResources(), R.drawable.chun_press );
+                bm = BitmapFactory.decodeResource( context.getResources(), R.drawable.chun );
                 break;
             case 12:
-                if( !pressed )
-                    bm = BitmapFactory.decodeResource( context.getResources(), R.drawable.kai );
-                else
-                    bm = BitmapFactory.decodeResource( context.getResources(), R.drawable.kai_press );
+                bm = BitmapFactory.decodeResource( context.getResources(), R.drawable.kai );
                 break;
             case 13:
-                if( !pressed )
-                    bm = BitmapFactory.decodeResource( context.getResources(), R.drawable.che );
-                else
-                    bm = BitmapFactory.decodeResource( context.getResources(), R.drawable.che_press );
+                bm = BitmapFactory.decodeResource( context.getResources(), R.drawable.che );
                 break;
             default:
-                if( !pressed )
-                    bm = BitmapFactory.decodeResource( context.getResources(), R.drawable.yao );
-                else
-                    bm = BitmapFactory.decodeResource( context.getResources(), R.drawable.yao_press );
+                bm = BitmapFactory.decodeResource( context.getResources(), R.drawable.yao );
                 break;
         }
         rectSrc = new Rect( 0, 0, bm.getWidth(), bm.getHeight() );

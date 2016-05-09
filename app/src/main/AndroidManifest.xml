@@ -11,23 +11,12 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <activity
             android:name=".DiceActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar"
-            android:configChanges="orientation|keyboardHidden" />
-        <activity
-            android:name=".WarSelect"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar"
-            android:configChanges="orientation|keyboardHidden" />
-        <activity
-            android:name=".Options"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar"
             android:configChanges="orientation|keyboardHidden" />

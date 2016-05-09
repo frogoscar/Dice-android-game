@@ -86,7 +86,7 @@ public class Description extends Activity {
 
             textHelp = new TextView( Description.this );
             textHelp.setTextSize( showFontSize );
-            textHelp.setText( "Jeu [La Roi de Casino] : Le chiffre 1 de dé est le chiffre universel. C’est-à-dire 1 peut être égal à 2, 3, 4, 5, 6. ");
+            textHelp.setText( "Jeu [La Roi de Casino] : Le chiffre 1 de dé est le chiffre universel. C’est-à-dire 1 peut être égal à 2, 3, 4, 5, 6. Joueur 1 : Regarde ses chiffres de 5 dés et devient le nombre X (ce qu’il pense le total de dés avec le chiffre «2» pour les 2 joueurs dans la tête)");
             lp = new AbsoluteLayout.LayoutParams(AbsoluteLayout.LayoutParams.WRAP_CONTENT, AbsoluteLayout.LayoutParams.WRAP_CONTENT, 0, 0);
             lp.x = 43 * screenWidth / 640;
             lp.y = 180 * screenHeight / 960;

@@ -45,12 +45,10 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
     private ImageView diceCup;
     private ImageView frame;
     private ImageView imageGray[], imageSide[];
-    private ImageView imageOption, imageHelp, imageWar;
     private ImageView imageWin, imageLose;
     private GestureDetector gd;
     private View touchView;
     private int resultState;
-    private ProgressDialog progressDialog;
     private int focusPerson;
     private int runSerialNo;
     private MediaPlayer mpClick = null;
@@ -64,7 +62,6 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
     private int warSign;
     private boolean warServer;
     private int phoneSum;
-    private int serverPhoneNo;
     private char getDiceValue[] = new char[2];
     private boolean isFirstFocus;
     private SayValue yourSayValue;
@@ -79,23 +76,7 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
     private int warNo;
     private int warPhoneId;
     private boolean yourDiceSetted;
-    private View clickedView;
 
-    Handler showProgressHandler = new Handler() {
-        public void handleMessage(Message msg) {
-            boolean dialogShouldShow = false;
-            if( progressDialog == null ) {
-                progressDialog = new ProgressDialog( DiceActivity.this );
-                dialogShouldShow = true;
-            }
-            String message = msg.getData().getString("message");
-            progressDialog.setMessage(message);
-            if( dialogShouldShow )
-                progressDialog.show();
-        }
-    };
-
-    /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,7 +90,6 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
                     warServer = true;
                 else {
                     warServer = false;
-                    serverPhoneNo = Integer.parseInt( getIntent().getStringExtra( "serverphoneno" ));
                 }
                 phoneSum = Integer.parseInt( getIntent().getStringExtra( "phonesum" ));
                 Toast.makeText( this, "Start" + Integer.toString( phoneSum + 1 ) + "-players game", Toast.LENGTH_SHORT ).show();
@@ -406,35 +386,35 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
         diceCup.setVisibility( View.INVISIBLE );
         alo.addView( diceCup );
 
-        imageOption = new ImageView( this );
-        imageOption.setBackgroundResource( R.drawable.select );
-        lp = new AbsoluteLayout.LayoutParams(AbsoluteLayout.LayoutParams.WRAP_CONTENT, AbsoluteLayout.LayoutParams.WRAP_CONTENT, 0, 0);
-        lp.x = 252 * screenWidth / 640;
-        lp.y = 918 * screenHeight / 960;
-        lp.width = 63 * screenWidth / 640;
-        lp.height = 22 * screenHeight / 960;
-        imageOption.setLayoutParams(lp);
-        alo.addView( imageOption );
-
-        imageHelp = new ImageView( this );
-        imageHelp.setBackgroundResource( R.drawable.explain );
-        lp = new AbsoluteLayout.LayoutParams(AbsoluteLayout.LayoutParams.WRAP_CONTENT, AbsoluteLayout.LayoutParams.WRAP_CONTENT, 0, 0);
-        lp.x = 395 * screenWidth / 640;
-        lp.y = 918 * screenHeight / 960;
-        lp.width = 63 * screenWidth / 640;
-        lp.height = 22 * screenHeight / 960;
-        imageHelp.setLayoutParams(lp);
-        alo.addView( imageHelp );
-
-        imageWar = new ImageView( this );
-        imageWar.setBackgroundResource( R.drawable.pvp_dark );
-        lp = new AbsoluteLayout.LayoutParams(AbsoluteLayout.LayoutParams.WRAP_CONTENT, AbsoluteLayout.LayoutParams.WRAP_CONTENT, 0, 0);
-        lp.x = 539 * screenWidth / 640;
-        lp.y = 918 * screenHeight / 960;
-        lp.width = 63 * screenWidth / 640;
-        lp.height = 22 * screenHeight / 960;
-        imageWar.setLayoutParams(lp);
-        alo.addView( imageWar );
+//        imageOption = new ImageView( this );
+//        imageOption.setBackgroundResource( R.drawable.select );
+//        lp = new AbsoluteLayout.LayoutParams(AbsoluteLayout.LayoutParams.WRAP_CONTENT, AbsoluteLayout.LayoutParams.WRAP_CONTENT, 0, 0);
+//        lp.x = 252 * screenWidth / 640;
+//        lp.y = 918 * screenHeight / 960;
+//        lp.width = 63 * screenWidth / 640;
+//        lp.height = 22 * screenHeight / 960;
+//        imageOption.setLayoutParams(lp);
+//        alo.addView( imageOption );
+//
+//        imageHelp = new ImageView( this );
+//        imageHelp.setBackgroundResource( R.drawable.explain );
+//        lp = new AbsoluteLayout.LayoutParams(AbsoluteLayout.LayoutParams.WRAP_CONTENT, AbsoluteLayout.LayoutParams.WRAP_CONTENT, 0, 0);
+//        lp.x = 395 * screenWidth / 640;
+//        lp.y = 918 * screenHeight / 960;
+//        lp.width = 63 * screenWidth / 640;
+//        lp.height = 22 * screenHeight / 960;
+//        imageHelp.setLayoutParams(lp);
+//        alo.addView( imageHelp );
+//
+//        imageWar = new ImageView( this );
+//        imageWar.setBackgroundResource( R.drawable.pvp_dark );
+//        lp = new AbsoluteLayout.LayoutParams(AbsoluteLayout.LayoutParams.WRAP_CONTENT, AbsoluteLayout.LayoutParams.WRAP_CONTENT, 0, 0);
+//        lp.x = 539 * screenWidth / 640;
+//        lp.y = 918 * screenHeight / 960;
+//        lp.width = 63 * screenWidth / 640;
+//        lp.height = 22 * screenHeight / 960;
+//        imageWar.setLayoutParams(lp);
+//        alo.addView( imageWar );
 
         imageWin = new ImageView( this );
         imageWin.setBackgroundResource( R.drawable.win );
@@ -458,54 +438,26 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
         imageLose.setVisibility( View.INVISIBLE );
         alo.addView( imageLose );
 
-        View.OnClickListener buttonClickListener = new View.OnClickListener() {
-            public void onClick(View v) {
-                clickedView = v;
-                if( v.equals( imageOption ))
-                    imageOption.setBackgroundResource( R.drawable.select_dark );
-                else if( v.equals( imageHelp ))
-                    imageHelp.setBackgroundResource( R.drawable.explain_dark );
-                else if( v.equals( imageWar ))
-                    imageWar.setBackgroundResource( R.drawable.pvp );
-                (new clickViewThread()).start();
-            }
-        };
-        imageOption.setOnClickListener( buttonClickListener );
-        imageHelp.setOnClickListener( buttonClickListener );
-        imageWar.setOnClickListener( buttonClickListener );
+//        View.OnClickListener buttonClickListener = new View.OnClickListener() {
+//            public void onClick(View v) {
+//                clickedView = v;
+//                if( v.equals( imageOption ))
+//                    imageOption.setBackgroundResource( R.drawable.select_dark );
+//                else if( v.equals( imageHelp ))
+//                    imageHelp.setBackgroundResource( R.drawable.explain_dark );
+//                else if( v.equals( imageWar ))
+//                    imageWar.setBackgroundResource( R.drawable.pvp );
+//                (new clickViewThread()).start();
+//            }
+//        };
+//        imageOption.setOnClickListener( buttonClickListener );
+//        imageHelp.setOnClickListener( buttonClickListener );
+//        imageWar.setOnClickListener( buttonClickListener );
 
         sayValueTrace = new SayValue[MAX_TRACE];
         mySayValue = null;
         new Thread( new runGame()).start();
     }
-
-    private class clickViewThread extends Thread {
-        public void run() {
-            try {
-                Thread.sleep( 50 );
-            } catch( Exception e ) {
-            }
-            if( clickedView.equals( imageOption )) {
-                startActivity( new Intent( DiceActivity.this, Options.class ));
-            } else if( clickedView.equals( imageHelp )) {
-                startActivity( new Intent( DiceActivity.this, Description.class ));
-            } else if( clickedView.equals( imageWar )) {
-                startActivityForResult( new Intent( DiceActivity.this, WarSelect.class ), 0 );
-            }
-            updateHandler.post( restoreViewRunnable );
-        }
-    }
-
-    final Runnable restoreViewRunnable = new Runnable() {
-        public void run() {
-            if( clickedView.equals( imageOption ))
-                imageOption.setBackgroundResource( R.drawable.select );
-            else if( clickedView.equals( imageHelp ))
-                imageHelp.setBackgroundResource( R.drawable.explain );
-            else if( clickedView.equals( imageWar ))
-                imageWar.setBackgroundResource( R.drawable.pvp_dark );
-        }
-    };
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if( resultCode != RESULT_OK )
@@ -526,7 +478,7 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
                     isFirstFocus = true;
                 else
                     isFirstFocus = false;
-                Toast.makeText( this, "��ʼ2�˶�ս", Toast.LENGTH_SHORT ).show();
+                Toast.makeText( this, "Start 2-players game", Toast.LENGTH_SHORT ).show();
                 yourDiceSetted = false;
                 new Thread( new runGame()).start();
             } else {
@@ -537,11 +489,10 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
                     warServer = true;
                 else {
                     warServer = false;
-                    serverPhoneNo = Integer.parseInt( bundle.getString( "serverphoneno" ));
                 }
                 phoneSum = Integer.parseInt( bundle.getString( "phonesum" ));
 
-                Toast.makeText( this, "��ʼ" + Integer.toString( phoneSum + 1 ) + "�˶�ս��", Toast.LENGTH_SHORT ).show();
+                Toast.makeText( this, "Start " + Integer.toString( phoneSum + 1 ) + "-players game", Toast.LENGTH_SHORT ).show();
                 if( warServer )
                     isFirstFocus = true;
                 else
@@ -560,7 +511,7 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
                     } catch( Exception e ) {
                     }
                 } else {
-                    Toast.makeText( this, "�Բ��������ļ��������أ��´�����ʱ��������", Toast.LENGTH_LONG ).show();
+                    Toast.makeText( this, "Sorry, the music file is still being downloaded, there will be music in the next run.", Toast.LENGTH_LONG ).show();
                 }
             }
         }
@@ -622,7 +573,7 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
 //                else
 //                    sendMsg( serverPhoneNo, (char)cmd, (char)param0, (char)param1, (char)0 );
             } else if( warSign == 2 ) {
-                Log.d(TAG, "send diceset" );
+                Log.d(TAG, "send dice set" );
                 byte[] cmd = new byte[21];
                 cmd[0] = cmd[1]= 0;
                 cmd[2] = (byte)( SUB_CMD_INTELLIGENCE_GAME_WAR_MSG / 256 );
@@ -846,14 +797,14 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
             String s;
             if( warSign == 0 && thinker != null && thinker.sayValue != null && thinker.sayValue.type == SayValue.SAY_VALUE_TYPE_SAY ) {
                 if( thinker.sayValue.count < 100 )
-                    s = Integer.toString( thinker.sayValue.count ) + "��" + Integer.toString( thinker.sayValue.num );
+                    s = Integer.toString( thinker.sayValue.count ) + " Dice" + Integer.toString( thinker.sayValue.num );
                 else
-                    s = Integer.toString( thinker.sayValue.count - 100 ) + "����" + Integer.toString( thinker.sayValue.num );
+                    s = Integer.toString( thinker.sayValue.count - 100 ) + " pure Dice" + Integer.toString( thinker.sayValue.num );
             } else if( warSign != 0 && yourSayValue != null && yourSayValue.type == SayValue.SAY_VALUE_TYPE_SAY && yourSayValue.count > 0 ) {
                 if( yourSayValue.count < 100 )
-                    s = Integer.toString( yourSayValue.count ) + "��" + Integer.toString( yourSayValue.num );
+                    s = Integer.toString( yourSayValue.count ) + " Dice" + Integer.toString( yourSayValue.num );
                 else
-                    s = Integer.toString( yourSayValue.count - 100 ) + "����" + Integer.toString( yourSayValue.num );
+                    s = Integer.toString( yourSayValue.count - 100 ) + " pure Dice" + Integer.toString( yourSayValue.num );
             } else
                 s = "";
             if( !s.equals( "" )) {
@@ -868,9 +819,9 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
                 s = Integer.toString( mySayValue.count % 100 );
                 if( mySayValue.num > -1 ) {
                     if( mySayValue.count < 100 )
-                        s += "��";
+                        s += " Dice";
                     else
-                        s += "����";
+                        s += " pure Dice";
                 }
                 if( mySayValue.num > 0 )
                     s += Integer.toString( mySayValue.num );
@@ -905,46 +856,9 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
         }
     };
 
-    private String changeToString( int num ) {
-        String s;
-        switch( num ) {
-            case 0: s = "zero"; break;
-            case 1: s = "one"; break;
-            case 2: s = "two"; break;
-            case 3: s = "three"; break;
-            case 4: s = "four"; break;
-            case 5: s = "five"; break;
-            case 6: s = "six"; break;
-            case 7: s = "seven"; break;
-            case 8: s = "eight"; break;
-            case 9: s = "nine"; break;
-            case 10: s = "ten"; break;
-            case 11: s = "eleven"; break;
-            case 12: s = "twelve"; break;
-            default: s = ""; break;
-        }
-        return s;
-    }
-
     public boolean onTouch(View v, MotionEvent event) {
         touchView = v;
         return gd.onTouchEvent( event );
-    }
-
-    public void recvMsgCallback( int phoneId, char cmd, char param1, char param2, char param3 ) {
-        Log.d(TAG, Integer.toString( (int)cmd ) + ", " + Integer.toString( (int)param1 ) + ", " + Integer.toString( (int)param2 ) + ", " + Integer.toString( (int)param3 ));
-        int i;
-        if( cmd == CMD_SET_DICE ) {
-            getDiceValue[0] = param1;
-            getDiceValue[1] = param2;
-            yourDiceSetted = true;
-        } else if( cmd == CMD_SAY ) {
-            yourSayValue.type = (int)param1;
-            yourSayValue.count = (int)param2;
-            yourSayValue.num = (int)param3;
-            if( mpClick != null )
-                mpClick.start();
-        }
     }
 
     private class shakeThread implements Runnable {
@@ -977,10 +891,10 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
 
     public void dialog_Exit(Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setMessage( "���Ҫ�뿪˫�˶�ս��??" );
-        builder.setTitle( "��ʾ" );
+        builder.setMessage( "Are you sure to leave 2-players game" );
+        builder.setTitle( "Tips" );
         builder.setIcon(android.R.drawable.ic_dialog_alert);
-        builder.setPositiveButton( "ȷ��",
+        builder.setPositiveButton( "Yes",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
@@ -988,7 +902,7 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
                     }
                 });
 
-        builder.setNegativeButton( "ȡ��",
+        builder.setNegativeButton( "No",
                 new android.content.DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
@@ -1001,41 +915,17 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
     @Override
     public boolean onCreateOptionsMenu( android.view.Menu menu ) {
         super.onCreateOptionsMenu( menu );
-        menu.add( "ѡ��" ).setIcon( android.R.drawable.ic_menu_preferences );
-        menu.add( "����" ).setIcon( android.R.drawable.ic_menu_info_details );
+        menu.add( "Option" ).setIcon( android.R.drawable.ic_menu_preferences );
+        menu.add( "About" ).setIcon( android.R.drawable.ic_menu_info_details );
         return true;
     }
 
     public boolean onOptionsItemSelected( MenuItem item ) {
-    	/*if( item.getTitle().equals( "ѡ��" ))
+    	/*if( item.getTitle().equals( "Option" ))
 			startActivity( new Intent( getApplicationContext(), com.joydin.intelligencegame.Options.class ));
     	else if( item.getTitle().equals( getString( R.string.About )))
     		startActivity( new Intent( this, com.joydin.intelligencegame.ConnectUs.class ));*/
         return super.onOptionsItemSelected( item );
-    }
-
-    public void handleNotifyMsg( int subCmd, byte[]msg, int point ) {
-        Log.d(TAG, "handleNotifyMsg len = " + msg.length + ", point = " + point );
-        switch( subCmd ) {
-            case WAR_CMD_DICE_NOTIFY_DICE_SET:
-                dice[0][0].setNum((int)msg[point] );
-                dice[0][1].setNum((int)msg[point + 1] );
-                dice[0][2].setNum((int)msg[point + 2] );
-                dice[0][3].setNum((int)msg[point + 3] );
-                dice[0][4].setNum((int)msg[point + 4] );
-                yourDiceSetted = true;
-                Log.d(TAG, "set ok" );
-                break;
-            case WAR_CMD_DICE_NOTIFY_SAY:
-                yourSayValue.type = (int)msg[point];
-                yourSayValue.count = (int)msg[point + 1];
-                yourSayValue.num = (int)msg[point + 2];
-                if( mpClick != null )
-                    mpClick.start();
-                break;
-            default:
-                break;
-        }
     }
 
     private class keyPressThread extends Thread {
@@ -1053,7 +943,7 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
             if( keyNo < 10 ) {
                 if( focusPerson != 1 ) {
                     Looper.prepare();
-                    Toast.makeText( DiceActivity.this, "��û�ֵ���", Toast.LENGTH_SHORT ).show();
+                    Toast.makeText( DiceActivity.this, "It is not your turn!", Toast.LENGTH_SHORT ).show();
                     Looper.loop();
                     return;
                 }
@@ -1064,7 +954,7 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
                 else if( mySayValue.num == 0 ) {
                     if( keyNo == 0 || keyNo > 6 ) {
                         Looper.prepare();
-                        Toast.makeText( DiceActivity.this, "�������?", Toast.LENGTH_SHORT ).show();
+                        Toast.makeText( DiceActivity.this, "Input error!", Toast.LENGTH_SHORT ).show();
                         Looper.loop();
                         return;
                     }
@@ -1086,7 +976,7 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
                     }
                     if( !checkOk ) {
                         Looper.prepare();
-                        Toast.makeText( DiceActivity.this, "�������?", Toast.LENGTH_SHORT ).show();
+                        Toast.makeText( DiceActivity.this, "Input error!", Toast.LENGTH_SHORT ).show();
                         Looper.loop();
                         return;
                     }
@@ -1120,7 +1010,7 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
 //                    }
                 } else {
                     Looper.prepare();
-                    Toast.makeText( DiceActivity.this, "�������?", Toast.LENGTH_SHORT ).show();
+                    Toast.makeText( DiceActivity.this, "Input error!", Toast.LENGTH_SHORT ).show();
                     Looper.loop();
                     return;
                 }
@@ -1141,7 +1031,7 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
                     updateHandler.post( refreshRunnable );
                 } else {
                     Looper.prepare();
-                    Toast.makeText( DiceActivity.this, "�������?", Toast.LENGTH_SHORT ).show();
+                    Toast.makeText( DiceActivity.this, "Input error!", Toast.LENGTH_SHORT ).show();
                     Looper.loop();
                 }
             } else if( keyNo == 11 ) {
@@ -1150,13 +1040,13 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
                     updateHandler.post( refreshRunnable );
                 } else {
                     Looper.prepare();
-                    Toast.makeText( DiceActivity.this, "�������?", Toast.LENGTH_SHORT ).show();
+                    Toast.makeText( DiceActivity.this, "Input error!", Toast.LENGTH_SHORT ).show();
                     Looper.loop();
                 }
             } else if( keyNo == 12 ) {
                 if( !haveSaid ) {
                     Looper.prepare();
-                    Toast.makeText( DiceActivity.this, "��û���������ܿ���", Toast.LENGTH_SHORT ).show();
+                    Toast.makeText( DiceActivity.this, "You have not said, can not open!", Toast.LENGTH_SHORT ).show();
                     Looper.loop();
                     return;
                 }
@@ -1195,11 +1085,11 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
                     updateHandler.post( refreshRunnable );
                 } else if( !( mySayValue.type == SayValue.SAY_VALUE_TYPE_SAY && mySayValue.num <= 0 )) {
                     Looper.prepare();
-                    Toast.makeText( DiceActivity.this, "�޷�����", Toast.LENGTH_SHORT ).show();
+                    Toast.makeText( DiceActivity.this, "Can not cancel!", Toast.LENGTH_SHORT ).show();
                     Looper.loop();
                 } else {
                     Looper.prepare();
-                    Toast.makeText( DiceActivity.this, "�Ѿ�������", Toast.LENGTH_SHORT ).show();
+                    Toast.makeText( DiceActivity.this, "Already empty!", Toast.LENGTH_SHORT ).show();
                     Looper.loop();
                 }
             } else if( keyNo == 14 ) {
@@ -1207,10 +1097,71 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
                     new Thread( new runGame()).start();
                 else {
                     Looper.prepare();
-                    Toast.makeText( DiceActivity.this, "���ڲ���ҡ����", Toast.LENGTH_SHORT ).show();
+                    Toast.makeText( DiceActivity.this, "Can not shake the dices", Toast.LENGTH_SHORT ).show();
                     Looper.loop();
                 }
             }
+        }
+    }
+
+    private String changeToString( int num ) {
+        String s;
+        switch( num ) {
+            case 0: s = "zero"; break;
+            case 1: s = "one"; break;
+            case 2: s = "two"; break;
+            case 3: s = "three"; break;
+            case 4: s = "four"; break;
+            case 5: s = "five"; break;
+            case 6: s = "six"; break;
+            case 7: s = "seven"; break;
+            case 8: s = "eight"; break;
+            case 9: s = "nine"; break;
+            case 10: s = "ten"; break;
+            case 11: s = "eleven"; break;
+            case 12: s = "twelve"; break;
+            default: s = ""; break;
+        }
+        return s;
+    }
+
+    public void handleNotifyMsg( int subCmd, byte[]msg, int point ) {
+        Log.d(TAG, "handleNotifyMsg len = " + msg.length + ", point = " + point );
+        switch( subCmd ) {
+            case WAR_CMD_DICE_NOTIFY_DICE_SET:
+                dice[0][0].setNum((int)msg[point] );
+                dice[0][1].setNum((int)msg[point + 1] );
+                dice[0][2].setNum((int)msg[point + 2] );
+                dice[0][3].setNum((int)msg[point + 3] );
+                dice[0][4].setNum((int)msg[point + 4] );
+                yourDiceSetted = true;
+                Log.d(TAG, "set ok" );
+                break;
+            case WAR_CMD_DICE_NOTIFY_SAY:
+                yourSayValue.type = (int)msg[point];
+                yourSayValue.count = (int)msg[point + 1];
+                yourSayValue.num = (int)msg[point + 2];
+                if( mpClick != null )
+                    mpClick.start();
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void recvMsgCallback( int phoneId, char cmd, char param1, char param2, char param3 ) {
+        Log.d(TAG, Integer.toString( (int)cmd ) + ", " + Integer.toString( (int)param1 ) + ", " + Integer.toString( (int)param2 ) + ", " + Integer.toString( (int)param3 ));
+        int i;
+        if( cmd == CMD_SET_DICE ) {
+            getDiceValue[0] = param1;
+            getDiceValue[1] = param2;
+            yourDiceSetted = true;
+        } else if( cmd == CMD_SAY ) {
+            yourSayValue.type = (int)param1;
+            yourSayValue.count = (int)param2;
+            yourSayValue.num = (int)param3;
+            if( mpClick != null )
+                mpClick.start();
         }
     }
 }
