@@ -13,6 +13,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -21,6 +22,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AbsoluteLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.io.File;
@@ -29,6 +31,7 @@ import java.io.File;
  * Created by exe on 4/05/16.
  */
 public class DiceActivity extends Activity implements View.OnTouchListener {
+    private final static String TAG = DiceActivity.class.getName();
     private final int MAX_PERSON = 2;
     private ImageView ivHead[];
     public final static int MAX_DICE = 5;
@@ -119,12 +122,11 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
             } else if( warSign == 2 ) {
                 warNo = Integer.parseInt( getIntent().getStringExtra( "warno" ));
                 warPhoneId = Integer.parseInt( getIntent().getStringExtra( "warphoneid" ));
-                DebugLog.writeDebug( "warPhoneId = " + warPhoneId );
+                Log.d(TAG, "warPhoneId = " + warPhoneId);
                 if( warPhoneId == 0 )
                     isFirstFocus = true;
                 else
                     isFirstFocus = false;
-                Comm.setNotifyActivity( this );
                 Toast.makeText( this, "Start 2-players game", Toast.LENGTH_SHORT ).show();
                 yourDiceSetted = false;
             }
@@ -180,7 +182,7 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
 
     private void showActivity() {
         getWindow().setBackgroundDrawable( getResources().getDrawable(R.drawable.bkcolor));
-        AbsoluteLayout alo = (AbsoluteLayout)findViewById( R.id.layout_dice_panel );
+        RelativeLayout alo = (RelativeLayout)findViewById( R.id.layout_dice_panel );
 
         Rect rect = new Rect();
         getWindow().getDecorView().getWindowVisibleDisplayFrame( rect );
@@ -188,10 +190,10 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
         int screenHeight = rect.bottom - rect.top;
 
         focusPerson = -1;
-        AbsoluteLayout.LayoutParams lp;
+        RelativeLayout.LayoutParams lp;
         frame = new ImageView( this );
         frame.setBackgroundResource( R.drawable.frame );
-        lp = new AbsoluteLayout.LayoutParams(AbsoluteLayout.LayoutParams.WRAP_CONTENT, AbsoluteLayout.LayoutParams.WRAP_CONTENT, 0, 0);
+        lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT, 0, 0);
         lp.x = 13 * screenWidth / 640;
         lp.y = 50 * screenHeight / 960;
         lp.width = 615 * screenWidth / 640;
@@ -552,7 +554,7 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
                 new Thread( new runGame()).start();
             }
         } else if( requestCode == 1 ) {
-            if( Config.voiceOn && mpClick == null ) {
+            if(mpClick == null) {
                 File audioFile = new File(  Environment.getExternalStorageDirectory().toString() + "/dice/work/click.wav" );
                 if( audioFile.exists()) {
                     mpClick = new MediaPlayer();
@@ -952,9 +954,8 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
             yourSayValue.type = (int)param1;
             yourSayValue.count = (int)param2;
             yourSayValue.num = (int)param3;
-            if( Config.voiceOn )
-                if( mpClick != null )
-                    mpClick.start();
+            if( mpClick != null )
+                mpClick.start();
         }
     }
 
@@ -1041,9 +1042,8 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
                 yourSayValue.type = (int)msg[point];
                 yourSayValue.count = (int)msg[point + 1];
                 yourSayValue.num = (int)msg[point + 2];
-                if( Config.voiceOn )
-                    if( mpClick != null )
-                        mpClick.start();
+                if( mpClick != null )
+                    mpClick.start();
                 break;
             default:
                 break;

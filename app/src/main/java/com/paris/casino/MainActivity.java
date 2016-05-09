@@ -6,6 +6,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AbsoluteLayout;
 import android.widget.ImageView;
@@ -15,6 +16,8 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 
 public class MainActivity extends AppCompatActivity {
+
+    private final static String TAG = MainActivity.class.getName();
 
     private View clickedView;
 
@@ -78,12 +81,11 @@ public class MainActivity extends AppCompatActivity {
                 out.close();
                 audioFile.renameTo( new File( Environment.getExternalStorageDirectory().toString() + "/dice/work/click.wav" ));
             } catch(Exception e) {
-                DebugLog.writeDebug( e.toString());
+                Log.e(TAG, e.toString());
             }
         }
 
         (new updateViewThread()).start();
-        (new connectServerThread()).start();
     }
 
     private class clickViewThread extends Thread {
@@ -93,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
             } catch( Exception e ) {
             }
             if( clickedView.equals((View)findViewById( R.id.ImageSingle ))) {
-                Intent newIntent = new Intent( Main.this, DiceActivity.class );
+                Intent newIntent = new Intent( MainActivity.this, DiceActivity.class );
                 newIntent.putExtra( "warsign", "0" );
                 startActivity( newIntent );
             } else if( clickedView.equals((View)findViewById( R.id.ImageMulti ))) {
