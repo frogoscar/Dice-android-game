@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AbsoluteLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -47,7 +48,7 @@ public class Description extends Activity {
     final Runnable updateViewRunnable = new Runnable() {
         public void run() {
             getWindow().setBackgroundDrawable( getResources().getDrawable(R.drawable.bkcolor));
-            RelativeLayout alo = (RelativeLayout)findViewById( R.id.layout_main );
+            AbsoluteLayout alo = (AbsoluteLayout)findViewById( R.id.layout_main );
 
             Rect rect = new Rect();
             getWindow().getDecorView().getWindowVisibleDisplayFrame( rect );
@@ -85,7 +86,7 @@ public class Description extends Activity {
 
             textHelp = new TextView( Description.this );
             textHelp.setTextSize( showFontSize );
-            textHelp.setText( " Description ");
+            textHelp.setText( "Jeu [La Roi de Casino] : Le chiffre 1 de dé est le chiffre universel. C’est-à-dire 1 peut être égal à 2, 3, 4, 5, 6. ");
             lp = new AbsoluteLayout.LayoutParams(AbsoluteLayout.LayoutParams.WRAP_CONTENT, AbsoluteLayout.LayoutParams.WRAP_CONTENT, 0, 0);
             lp.x = 43 * screenWidth / 640;
             lp.y = 180 * screenHeight / 960;

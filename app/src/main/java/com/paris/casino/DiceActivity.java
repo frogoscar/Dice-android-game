@@ -112,7 +112,6 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
                     serverPhoneNo = Integer.parseInt( getIntent().getStringExtra( "serverphoneno" ));
                 }
                 phoneSum = Integer.parseInt( getIntent().getStringExtra( "phonesum" ));
-                (new commRunThread()).start();
                 Toast.makeText( this, "Start" + Integer.toString( phoneSum + 1 ) + "-players game", Toast.LENGTH_SHORT ).show();
                 if( warServer )
                     isFirstFocus = true;
@@ -182,7 +181,7 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
 
     private void showActivity() {
         getWindow().setBackgroundDrawable( getResources().getDrawable(R.drawable.bkcolor));
-        RelativeLayout alo = (RelativeLayout)findViewById( R.id.layout_dice_panel );
+        AbsoluteLayout alo = (AbsoluteLayout)findViewById( R.id.layout_dice_panel );
 
         Rect rect = new Rect();
         getWindow().getDecorView().getWindowVisibleDisplayFrame( rect );
@@ -190,12 +189,12 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
         int screenHeight = rect.bottom - rect.top;
 
         focusPerson = -1;
-        RelativeLayout.LayoutParams lp;
+        AbsoluteLayout.LayoutParams lp;
         frame = new ImageView( this );
         frame.setBackgroundResource( R.drawable.frame );
-        lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT, 0, 0);
-        lp.x = 13 * screenWidth / 640;
-        lp.y = 50 * screenHeight / 960;
+        lp = new AbsoluteLayout.LayoutParams(AbsoluteLayout.LayoutParams.WRAP_CONTENT, AbsoluteLayout.LayoutParams.WRAP_CONTENT, 0, 0);
+        lp.width = 13 * screenWidth / 640;
+        lp.height = 50 * screenHeight / 960;
         lp.width = 615 * screenWidth / 640;
         lp.height = 165 * screenHeight / 960;
         frame.setLayoutParams(lp);
@@ -351,9 +350,8 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
                     int i;
                     for( i = 0; i < MAX_KEY; i++ )
                         if( touchView == keyView[i] ) {
-                            if( Config.voiceOn )
-                                if( mpClick != null )
-                                    mpClick.start();
+                            if( mpClick != null )
+                                mpClick.start();
                             break;
                         }
 
@@ -516,9 +514,9 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
             Bundle bundle = data.getExtras();
             String warType = bundle.getString( "wartype" );
             if( warType == null)
-                DebugLog.writeDebug( "warType is null" );
+                Log.d(TAG, "warType is null" );
             else
-                DebugLog.writeDebug( "warType is " + warType );
+                Log.d(TAG, "warType is " + warType );
             if( warType.equals( "wan" )) {
                 warSign = 2;
                 runSerialNo++;
@@ -528,7 +526,6 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
                     isFirstFocus = true;
                 else
                     isFirstFocus = false;
-                Comm.setNotifyActivity( this );
                 Toast.makeText( this, "��ʼ2�˶�ս", Toast.LENGTH_SHORT ).show();
                 yourDiceSetted = false;
                 new Thread( new runGame()).start();
@@ -544,7 +541,6 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
                 }
                 phoneSum = Integer.parseInt( bundle.getString( "phonesum" ));
 
-                (new commRunThread()).start();
                 Toast.makeText( this, "��ʼ" + Integer.toString( phoneSum + 1 ) + "�˶�ս��", Toast.LENGTH_SHORT ).show();
                 if( warServer )
                     isFirstFocus = true;
@@ -573,7 +569,7 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
     private class runGame implements Runnable {
         private int myRunSerialNo;
         public void run() {
-            DebugLog.writeDebug( "run game" );
+            Log.d(TAG, "run game" );
             gameRunning = true;
             haveSaid = false;
             myRunSerialNo = runSerialNo;
@@ -587,7 +583,7 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
             isPure = false;
             currTrace = 0;
             sayValueTrace[currTrace] = mySayValue.clone();
-            DebugLog.writeDebug( "do 1" );
+            Log.d(TAG, "do 1" );
 
             int i;
             for( i = 0; i < MAX_DICE; i++ ) {
@@ -600,7 +596,7 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
                 }
                 dice[1][i].state = Dice.DICE_STATE_DICE;
             }
-            DebugLog.writeDebug( "create dice" );
+            Log.d(TAG, "create dice" );
 
             int times = 0;
             while( true ){
@@ -620,13 +616,13 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
                 int cmd = CMD_SET_DICE;
                 int param0 = ( dice[1][0].getNum() - 1 ) * 36 + ( dice[1][1].getNum() - 1 ) * 6 + dice[1][2].getNum() - 1;
                 int param1 = ( dice[1][3].getNum() - 1 ) * 6 + dice[1][4].getNum() - 1;
-                if( warServer )
-                    for( int phondNo = 0; phondNo < phoneSum; phondNo++ )
-                        sendMsg( phondNo, (char)cmd, (char)param0, (char)param1, (char)0 );
-                else
-                    sendMsg( serverPhoneNo, (char)cmd, (char)param0, (char)param1, (char)0 );
+//                if( warServer )
+//                    for( int phondNo = 0; phondNo < phoneSum; phondNo++ )
+//                        sendMsg( phondNo, (char)cmd, (char)param0, (char)param1, (char)0 );
+//                else
+//                    sendMsg( serverPhoneNo, (char)cmd, (char)param0, (char)param1, (char)0 );
             } else if( warSign == 2 ) {
-                DebugLog.writeDebug( "send diceset" );
+                Log.d(TAG, "send diceset" );
                 byte[] cmd = new byte[21];
                 cmd[0] = cmd[1]= 0;
                 cmd[2] = (byte)( SUB_CMD_INTELLIGENCE_GAME_WAR_MSG / 256 );
@@ -648,12 +644,11 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
                 cmd[18] = (byte)dice[1][2].getNum();
                 cmd[19] = (byte)dice[1][3].getNum();
                 cmd[20] = (byte)dice[1][4].getNum();
-                Comm.sendCmdTcp( cmd, 21 );
             }
-            DebugLog.writeDebug( "waitting yourDiceSetted" );
+            Log.d(TAG, "waiting yourDiceSet" );
             while( warSign != 0 && !yourDiceSetted ) {
                 if( myRunSerialNo != runSerialNo ) {
-                    DebugLog.writeDebug( "wait otherside return" );
+                    Log.d(TAG, "wait other side return" );
                     return;
                 }
                 try {
@@ -677,7 +672,7 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
                     dice[0][i].state = Dice.DICE_STATE_CUP;
             }
 
-            DebugLog.writeDebug( "warSign = " + warSign + ", isFirstFocus = " + isFirstFocus );
+            Log.d(TAG, "warSign = " + warSign + ", isFirstFocus = " + isFirstFocus );
             if( warSign != 0 ) {
                 if( isFirstFocus )
                     focusPerson = 1;
@@ -698,9 +693,8 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
                         return;
                     thinker.say();
                     haveSaid = true;
-                    if( Config.voiceOn )
-                        if( mpClick != null )
-                            mpClick.start();
+                    if( mpClick != null )
+                        mpClick.start();
                     if( thinker.sayValue.count > 100 || thinker.sayValue.num == 1 )
                         isPure = true;
                     if( thinker.sayValue.type == SayValue.SAY_VALUE_TYPE_OPEN )
@@ -937,14 +931,8 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
         return gd.onTouchEvent( event );
     }
 
-    private class commRunThread extends Thread {
-        public void run() {
-            commRun();
-        }
-    }
-
     public void recvMsgCallback( int phoneId, char cmd, char param1, char param2, char param3 ) {
-        DebugLog.writeDebug( Integer.toString( (int)cmd ) + ", " + Integer.toString( (int)param1 ) + ", " + Integer.toString( (int)param2 ) + ", " + Integer.toString( (int)param3 ));
+        Log.d(TAG, Integer.toString( (int)cmd ) + ", " + Integer.toString( (int)param1 ) + ", " + Integer.toString( (int)param2 ) + ", " + Integer.toString( (int)param3 ));
         int i;
         if( cmd == CMD_SET_DICE ) {
             getDiceValue[0] = param1;
@@ -989,7 +977,7 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
 
     public void dialog_Exit(Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setMessage( "���Ҫ�뿪˫�˶�ս��?" );
+        builder.setMessage( "���Ҫ�뿪˫�˶�ս��??" );
         builder.setTitle( "��ʾ" );
         builder.setIcon(android.R.drawable.ic_dialog_alert);
         builder.setPositiveButton( "ȷ��",
@@ -1027,7 +1015,7 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
     }
 
     public void handleNotifyMsg( int subCmd, byte[]msg, int point ) {
-        DebugLog.writeDebug( "handleNotifyMsg len = " + msg.length + ", point = " + point );
+        Log.d(TAG, "handleNotifyMsg len = " + msg.length + ", point = " + point );
         switch( subCmd ) {
             case WAR_CMD_DICE_NOTIFY_DICE_SET:
                 dice[0][0].setNum((int)msg[point] );
@@ -1036,7 +1024,7 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
                 dice[0][3].setNum((int)msg[point + 3] );
                 dice[0][4].setNum((int)msg[point + 4] );
                 yourDiceSetted = true;
-                DebugLog.writeDebug( "set ok" );
+                Log.d(TAG, "set ok" );
                 break;
             case WAR_CMD_DICE_NOTIFY_SAY:
                 yourSayValue.type = (int)msg[point];
@@ -1076,7 +1064,7 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
                 else if( mySayValue.num == 0 ) {
                     if( keyNo == 0 || keyNo > 6 ) {
                         Looper.prepare();
-                        Toast.makeText( DiceActivity.this, "�������", Toast.LENGTH_SHORT ).show();
+                        Toast.makeText( DiceActivity.this, "�������?", Toast.LENGTH_SHORT ).show();
                         Looper.loop();
                         return;
                     }
@@ -1098,18 +1086,18 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
                     }
                     if( !checkOk ) {
                         Looper.prepare();
-                        Toast.makeText( DiceActivity.this, "�������", Toast.LENGTH_SHORT ).show();
+                        Toast.makeText( DiceActivity.this, "�������?", Toast.LENGTH_SHORT ).show();
                         Looper.loop();
                         return;
                     }
                     mySayValue.num = keyNo;
-                    if( warSign == 1 ) {
-                        if( warServer )
-                            for( keyNo = 0; keyNo < phoneSum; keyNo++ )
-                                sendMsg( keyNo, CMD_SAY, (char)mySayValue.type, (char)mySayValue.count, (char)mySayValue.num );
-                        else
-                            sendMsg( serverPhoneNo, CMD_SAY, (char)mySayValue.type, (char)mySayValue.count, (char)mySayValue.num );
-                    } else if( warSign == 2 ) {
+//                    if( warSign == 1 ) {
+//                        if( warServer )
+//                            for( keyNo = 0; keyNo < phoneSum; keyNo++ )
+//                                sendMsg( keyNo, CMD_SAY, (char)mySayValue.type, (char)mySayValue.count, (char)mySayValue.num );
+//                        else
+//                            sendMsg( serverPhoneNo, CMD_SAY, (char)mySayValue.type, (char)mySayValue.count, (char)mySayValue.num );
+//                    } else if( warSign == 2 ) {
                         byte[] cmd = new byte[19];
                         cmd[0] = cmd[1]= 0;
                         cmd[2] = (byte)( SUB_CMD_INTELLIGENCE_GAME_WAR_MSG / 256 );
@@ -1129,11 +1117,10 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
                         cmd[16] = (byte)mySayValue.type;
                         cmd[17] = (byte)mySayValue.count;
                         cmd[18] = (byte)mySayValue.num;
-                        Comm.sendCmdTcp( cmd, 19 );
-                    }
+//                    }
                 } else {
                     Looper.prepare();
-                    Toast.makeText( DiceActivity.this, "�������", Toast.LENGTH_SHORT ).show();
+                    Toast.makeText( DiceActivity.this, "�������?", Toast.LENGTH_SHORT ).show();
                     Looper.loop();
                     return;
                 }
@@ -1154,7 +1141,7 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
                     updateHandler.post( refreshRunnable );
                 } else {
                     Looper.prepare();
-                    Toast.makeText( DiceActivity.this, "�������", Toast.LENGTH_SHORT ).show();
+                    Toast.makeText( DiceActivity.this, "�������?", Toast.LENGTH_SHORT ).show();
                     Looper.loop();
                 }
             } else if( keyNo == 11 ) {
@@ -1163,7 +1150,7 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
                     updateHandler.post( refreshRunnable );
                 } else {
                     Looper.prepare();
-                    Toast.makeText( DiceActivity.this, "�������", Toast.LENGTH_SHORT ).show();
+                    Toast.makeText( DiceActivity.this, "�������?", Toast.LENGTH_SHORT ).show();
                     Looper.loop();
                 }
             } else if( keyNo == 12 ) {
@@ -1174,13 +1161,13 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
                     return;
                 }
                 mySayValue.type = SayValue.SAY_VALUE_TYPE_OPEN;
-                if( warSign == 1 ) {
-                    if( warServer )
-                        for( keyNo = 0; keyNo < phoneSum; keyNo++ )
-                            sendMsg( keyNo, CMD_SAY, (char)mySayValue.type, (char)mySayValue.count, (char)mySayValue.num );
-                    else
-                        sendMsg( serverPhoneNo, CMD_SAY, (char)mySayValue.type, (char)mySayValue.count, (char)mySayValue.num );
-                } else if( warSign == 2 ) {
+//                if( warSign == 1 ) {
+//                    if( warServer )
+//                        for( keyNo = 0; keyNo < phoneSum; keyNo++ )
+//                            sendMsg( keyNo, CMD_SAY, (char)mySayValue.type, (char)mySayValue.count, (char)mySayValue.num );
+//                    else
+//                        sendMsg( serverPhoneNo, CMD_SAY, (char)mySayValue.type, (char)mySayValue.count, (char)mySayValue.num );
+//                } else if( warSign == 2 ) {
                     byte[] cmd = new byte[19];
                     cmd[0] = cmd[1]= 0;
                     cmd[2] = (byte)( SUB_CMD_INTELLIGENCE_GAME_WAR_MSG / 256 );
@@ -1200,8 +1187,7 @@ public class DiceActivity extends Activity implements View.OnTouchListener {
                     cmd[16] = (byte)mySayValue.type;
                     cmd[17] = (byte)mySayValue.count;
                     cmd[18] = (byte)mySayValue.num;
-                    Comm.sendCmdTcp( cmd, 19 );
-                }
+//                }
             } else if( keyNo == 13 ) {
                 if( currTrace > 0 && mySayValue.type == SayValue.SAY_VALUE_TYPE_SAY && mySayValue.num <= 0 ) {
                     currTrace--;

@@ -21,19 +21,11 @@ public class MainActivity extends AppCompatActivity {
 
     private View clickedView;
 
-    public native int commInit( String path );
-    public native void commTerm();
-    static {
-        System.loadLibrary( "comm" );
-    }
-
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        commInit( Environment.getExternalStorageDirectory().toString());
 
         View.OnClickListener clickListener = new View.OnClickListener() {
             public void onClick(View v) {
@@ -126,14 +118,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        commTerm();
-        DebugLog.term();
-        Comm.stop();
-    }
-
     final Handler updateHandler = new Handler();
     final Runnable updateViewRunnable = new Runnable() {
         public void run() {
@@ -193,10 +177,10 @@ public class MainActivity extends AppCompatActivity {
             Bundle bundle = data.getExtras();
             String warType = bundle.getString( "wartype" );
             if( warType == null)
-                DebugLog.writeDebug( "warType is null" );
+                Log.d(TAG,  "warType is null" );
             else
-                DebugLog.writeDebug( "warType is " + warType );
-            Intent newIntent = new Intent( Main.this, DiceActivity.class );
+                Log.d(TAG, "warType is " + warType );
+            Intent newIntent = new Intent( MainActivity.this, DiceActivity.class );
             if( warType.equals( "wan" )) {
                 newIntent.putExtra( "warsign", "2" );
                 newIntent.putExtra( "warno", bundle.getString( "warno" ));

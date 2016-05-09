@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:background="@drawable/help_back"
     android:id="@+id/layout_main"
@@ -7,4 +7,4 @@
     android:layout_height="wrap_content"
     android:layout_weight="1" >
 
-</RelativeLayout>
+</AbsoluteLayout>
